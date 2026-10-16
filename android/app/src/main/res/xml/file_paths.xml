@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  FileProvider 路径配置。
+
+  MemoExporter 在公共存储写入失败时，会退到应用私有目录 filesDir 再通过
+  FileProvider 分享，因此必须开放 files-path。
+-->
+<paths>
+    <files-path
+        name="internal_files"
+        path="." />
+    <cache-path
+        name="internal_cache"
+        path="." />
+    <external-path
+        name="external_files"
+        path="." />
+    <external-files-path
+        name="external_app_files"
+        path="." />
+</paths>
