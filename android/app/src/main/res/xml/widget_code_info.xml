@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  小部件尺寸声明。
+
+  官方规范：minWidth = 列数 × 74 - 2，minHeight = 行数 × 74 - 2。
+  因为 MIUI/HyperOS 桌面用 4×6 与 5×6 两套网格，给 minResizeWidth/Height
+  让用户能自由拖拽调整（需求："自由选择 1×4、2×4 等"）。
+
+  ⚠️ receiver 类名 android:name 一旦上架/发布禁止修改，
+     Android 靠类名标识小部件，改名会导致用户升级后小部件消失。
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="146"
+    android:minHeight="74"
+    android:minResizeWidth="74"
+    android:minResizeHeight="74"
+    android:maxResizeWidth="450"
+    android:maxResizeHeight="450"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_code"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:previewLayout="@layout/widget_code"
+    android:description="@string/widget_description"
+    android:initialKeyguardLayout="@layout/widget_code" />
