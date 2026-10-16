@@ -1,15 +1,11 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
 
-// ⚠️ 注意：标准 Flutter 混编工程还需 `apply from: 'flutter.groovy'`，
-// 但该文件由 `flutter create` 生成、构建时由 flutter tool 补齐，
-// **不要手写**（手写的版本会缺 engineVersion 等变量导致编译失败）。
-//
-// 首次使用请先执行：
-//   flutter create . --org com.codebeacon --project-name codebeacon
-// 它会自动生成/修复 flutter.groovy 与缺失的标准文件，
-// 然后再把本文件与 src/ 下的自定义代码合并进来。
-// 详见 README「构建」章节。
+// Flutter 引擎集成走 settings.gradle 的 dev.flutter.flutter-plugin-loader
+// （Flutter 3.16+ 标准方案，不再使用 flutter.groovy）。
 
 android {
     namespace 'com.codebeacon.widget'
