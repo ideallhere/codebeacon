@@ -164,8 +164,8 @@ class BeaconBridge {
       _channel.invokeMethod<String>('exportMemoFile');
 
   /// 用系统应用打开导出的文件
-  static Future<bool> openMemo(String uri) =>
-      _channel.invokeMethod<bool>('openMemo', {'uri': uri});
+  static Future<bool> openMemo(String uri) async =>
+      await _channel.invokeMethod<bool>('openMemo', {'uri': uri}) ?? false;
 
   // ── 调试 ────────────────────────────────────────────────
 
