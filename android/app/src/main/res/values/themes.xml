@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      应用主题。
+      用 DayNight + values-night 自动切换，配合 MIUI 的深色模式规范。
+    -->
+    <style name="Theme.CodeBeacon" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:windowBackground">@color/app_bg</item>
+    </style>
+</resources>
