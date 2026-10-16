@@ -3,7 +3,7 @@ package com.codebeacon.widget.bridge
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import android.text.ClipboardManager
+import android.content.ClipboardManager
 import android.content.ClipData
 import androidx.annotation.NonNull
 import com.codebeacon.widget.data.PickupCodeStore
