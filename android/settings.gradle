@@ -1,5 +1,3 @@
-rootProject.name = 'codebeacon'
-
 pluginManagement {
     def flutterSdkPath = {
         def properties = new Properties()
@@ -24,4 +22,5 @@ plugins {
     id "org.jetbrains.kotlin.android" version "1.9.24" apply false
 }
 
+rootProject.name = 'codebeacon'
 include ':app'
