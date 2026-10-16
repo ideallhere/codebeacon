@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">取件码信标</string>
+    <string name="widget_label">取件码</string>
+    <string name="widget_description">自动识别短信与微信、支付宝里的快递取件码，点按即可复制</string>
+
+    <!-- 小部件状态文案 -->
+    <string name="widget_idle">取件码信标</string>
+    <string name="widget_waiting">等待取件通知…</string>
+    <string name="widget_need_access">未开启通知使用权</string>
+    <string name="widget_tap_to_enable">点按前往设置</string>
+    <string name="widget_blocked">内容被系统隐藏</string>
+    <string name="widget_blocked_hint">Android 15 已脱敏该通知</string>
+    <string name="widget_age">%1$s</string>
+    <string name="copied">取件码已复制：%1$s</string>
+</resources>
