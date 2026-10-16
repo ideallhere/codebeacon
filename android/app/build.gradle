@@ -1,0 +1,83 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+// ⚠️ 注意：标准 Flutter 混编工程还需 `apply from: 'flutter.groovy'`，
+// 但该文件由 `flutter create` 生成、构建时由 flutter tool 补齐，
+// **不要手写**（手写的版本会缺 engineVersion 等变量导致编译失败）。
+//
+// 首次使用请先执行：
+//   flutter create . --org com.codebeacon --project-name codebeacon
+// 它会自动生成/修复 flutter.groovy 与缺失的标准文件，
+// 然后再把本文件与 src/ 下的自定义代码合并进来。
+// 详见 README「构建」章节。
+
+android {
+    namespace 'com.codebeacon.widget'
+    compileSdk 34
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        applicationId "com.codebeacon.widget"
+        minSdk 26              // 通知监听 API 18 起，但 26 能用更多 API 且覆盖率高
+        targetSdk 34           // 对齐 compileSdk；34 不会触发 Android 15 的 OTP 脱敏策略
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    signingConfigs {
+        release {
+            // 读取 android/key.properties；CI 上不存在时回落到调试签名，
+            // 保证自用也能构建出可安装的包。
+            def propsFile = rootProject.file('key.properties')
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                storeFile file(props['storeFile'])
+                storePassword props['storePassword']
+                keyAlias props['keyAlias']
+                keyPassword props['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            // ⚠️ 关键：不能在 key.properties 缺失时直接引用 signingConfigs.release，
+            // 那会导致 release 构建失败。显式判空并回落。
+            if (rootProject.file('key.properties').exists()) {
+                signingConfig signingConfigs.release
+            }
+            minifyEnabled false       // 先不开启混淆，等功能验证通过再开（混淆会拖慢调试）
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+        }
+    }
+
+    packaging {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+    implementation "androidx.core:core-ktx:1.13.1"
+    implementation "androidx.appcompat:appcompat:1.7.0"
+    // FileProvider 用于私有目录文件分享
+    implementation "androidx.core:core:1.13.1"
+    testImplementation 'junit:junit:4.13.2'
+}
