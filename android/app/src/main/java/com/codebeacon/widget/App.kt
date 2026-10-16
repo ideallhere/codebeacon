@@ -1,15 +1,13 @@
 package com.codebeacon.widget
 
-import io.flutter.app.FlutterApplication
+import android.app.Application
 
 /**
  * 应用入口。
  *
- * 用 [FlutterApplication]（v1 embedding 的 Application 基类），
- * 它会自动处理 Flutter 引擎相关的初始化。
- *
- * 注意：自定义插件的注册在
- * [com.codebeacon.widget.bridge.MainActivity.configureFlutterEngine] 中完成，
- * 因为纯 Kotlin 手写插件不在 `GeneratedPluginRegistrant` 里。
+ * Flutter 3.27 已移除 v1 embedding 的 FlutterApplication，
+ * 标准 Application 即可（引擎初始化由 MainActivity 的
+ * configureFlutterEngine 完成，纯 Kotlin 手写插件不走
+ * GeneratedPluginRegistrant）。
  */
-class App : FlutterApplication()
+class App : Application()
