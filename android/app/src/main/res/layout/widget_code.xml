@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  小部件主布局（2×2 / 2×4 等单条视图共用）。
+
+  ⚠️ RemoteViews 限制：只支持 LinearLayout/FrameLayout/RelativeLayout/GridLayout
+  等有限容器与 TextView/ImageView/Button/ProgressBar 等基础控件。
+  不支持 ConstraintLayout、不支持自定义 View、不支持 ViewAnimator。
+  所以"顺滑下移"不能用布局动画实现，详见 WidgetRenderer 的处理。
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_bg"
+    android:padding="@dimen/widget_root_padding">
+
+    <!-- 快递标识行 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/badge"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:textSize="11sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="@drawable/badge_bg"
+            android:text="?" />
+
+        <TextView
+            android:id="@+id/courier_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="12sp"
+            android:textColor="@color/widget_subtext" />
+    </LinearLayout>
+
+    <!-- 取件码主体：点按整块复制 -->
+    <TextView
+        android:id="@+id/code"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="@color/widget_text"
+        android:letterSpacing="0.05"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="----" />
+
+    <!-- 底部：时间提示 -->
+    <TextView
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:textColor="@color/widget_subtext" />
+</LinearLayout>
