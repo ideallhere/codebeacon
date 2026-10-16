@@ -1,24 +1,6 @@
 // 顶层构建文件
-buildscript {
-    ext {
-        // ── 版本锁定（改动前务必确认兼容性）──────────────
-        // compileSdk 34：支持 Android 14，且不需要 35 的新权限行为
-        kotlin_version = '1.9.24'
-        agp_version = '8.5.2'
-
-        // ── 注意 ──
-        // AGP 8.x 要求 JDK 17；compileSdk 34 与 AGP 8.5 是成熟组合。
-        // 若 CI 构建报 compileSdk 不兼容，先降 AGP 到 8.1.4 再试。
-    }
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:$agp_version'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+// AGP / Kotlin 版本由 settings.gradle 的 plugins 块统一管理（Flutter 3.16+ 标准方案），
+// 这里不再需要 buildscript classpath。
 
 allprojects {
     repositories {
