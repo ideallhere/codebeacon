@@ -106,7 +106,7 @@ class CodeWidgetProvider : AppWidgetProvider() {
                 views.setTextViewText(R.id.code, "--")
                 views.setTextViewText(R.id.footer, context.getString(R.string.widget_tap_to_enable))
                 views.setTextColor(R.id.code, Color.parseColor("#E53935"))
-                views.setOnClickPendingIntent(R.id.root, openAppIntent(context))
+                views.setOnClickPendingIntent(R.id.widget_root, openAppIntent(context))
                 manager.updateAppWidget(widgetId, views)
                 return
             }
@@ -120,7 +120,7 @@ class CodeWidgetProvider : AppWidgetProvider() {
                 views.setTextViewText(R.id.code, "----")
                 views.setTextViewText(R.id.footer, context.getString(R.string.widget_waiting))
                 views.setTextColor(R.id.code, Color.parseColor("#9E9E9E"))
-                views.setOnClickPendingIntent(R.id.root, openAppIntent(context))
+                views.setOnClickPendingIntent(R.id.widget_root, openAppIntent(context))
                 manager.updateAppWidget(widgetId, views)
                 return
             }
@@ -134,7 +134,7 @@ class CodeWidgetProvider : AppWidgetProvider() {
                 views.setTextViewText(R.id.code, "----")
                 views.setTextViewText(R.id.footer, context.getString(R.string.widget_blocked_hint))
                 views.setTextColor(R.id.code, Color.parseColor("#FB8C00"))
-                views.setOnClickPendingIntent(R.id.root, openAppIntent(context))
+                views.setOnClickPendingIntent(R.id.widget_root, openAppIntent(context))
                 manager.updateAppWidget(widgetId, views)
                 return
             }
@@ -154,7 +154,7 @@ class CodeWidgetProvider : AppWidgetProvider() {
                 copyIntent(context, latest.id, latest.code)
             )
             // 点按空白区 → 打开 App
-            views.setOnClickPendingIntent(R.id.root, openAppIntent(context))
+            views.setOnClickPendingIntent(R.id.widget_root, openAppIntent(context))
 
             manager.updateAppWidget(widgetId, views)
         }
