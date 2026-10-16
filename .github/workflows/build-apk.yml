@@ -66,14 +66,10 @@ jobs:
 
           # flutter create 生成的 Manifest 可能引入了它自己的 MainActivity，
           # 我们的在 bridge/ 包下，类名不同不会冲突，但要确认无重复声明。
-          echo "---- 确认 flutter.groovy 已生成 ----"
-          ls -la android/flutter.groovy
+          echo "---- 确认 settings.gradle 插件注入配置 ----"
+          grep -q "flutter-plugin-loader" android/settings.gradle && echo "settings.gradle OK"
 
-          # 把 apply from 语句加回 app/build.gradle
-          # （flutter create 不会改 build.gradle 的 apply 语句，但保险起见校验）
-          if ! grep -q "flutter.groovy" android/app/build.gradle; then
-            echo "::warning::build.gradle 缺少 flutter.groovy 引用，可能需手动补"
-          fi
+          # Flutter 3.16+ 走 settings.gradle 插件注入，无需 flutter.groovy
 
       # 静态分析不阻断构建：混编工程首轮常有 info 级提示
       - name: 静态分析（不阻断）
