@@ -10,12 +10,12 @@
      Android 靠类名标识小部件，改名会导致用户升级后小部件消失。
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="146"
-    android:minHeight="74"
-    android:minResizeWidth="74"
-    android:minResizeHeight="74"
-    android:maxResizeWidth="450"
-    android:maxResizeHeight="450"
+    android:minWidth="146dp"
+    android:minHeight="74dp"
+    android:minResizeWidth="74dp"
+    android:minResizeHeight="74dp"
+    android:maxResizeWidth="450dp"
+    android:maxResizeHeight="450dp"
     android:targetCellWidth="2"
     android:targetCellHeight="2"
     android:updatePeriodMillis="1800000"
