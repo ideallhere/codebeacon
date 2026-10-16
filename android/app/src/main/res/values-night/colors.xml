@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  深色模式配色（values-night）。
+
+  这是 MIUI 小部件规范的硬性要求：深色适配只能通过资源目录静态完成，
+  因为小部件由 Launcher 进程渲染，无法在 RemoteViews 里判断当前是否深色模式。
+-->
+<resources>
+    <color name="widget_text">#F5F5F5</color>
+    <color name="widget_subtext">#BDBDBD</color>
+    <color name="widget_bg_start">#2C2C2E</color>
+    <color name="widget_bg_end">#1C1C1E</color>
+    <color name="widget_badge">#FF8A3D</color>
+    <color name="widget_stroke">#1FFFFFFF</color>
+    <color name="app_bg">#121212</color>
+</resources>
