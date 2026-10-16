@@ -21,10 +21,14 @@
     <application
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
-        android:name=".bridge.AppBridge"
+        android:name=".App"
         android:allowBackup="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.CodeBeacon">
+        <!-- Flutter v2 embedding 声明（缺失会导致构建失败） -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
 
         <!-- Flutter 侧承载，Kotlin 与 Flutter 混编时需要 -->
         <activity
