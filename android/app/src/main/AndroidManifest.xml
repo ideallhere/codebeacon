@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      权限说明：极简设计，V1 只需要通知使用权。
+
+      刻意不申请的权限：
+      ✗ READ_SMS / RECEIVE_SMS  —— Android 13+ 仅默认短信应用可获，14+ 完全禁止
+      ✗ INTERNET —— V1 全本地运行，取件码不出设备
+      ✗ QUERY_ALL_PACKAGES —— 只查已知包名
+    -->
+
+    <!-- 通知使用权：核心权限，用户在系统设置手动授予 -->
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- V2 取件提醒用；V1 不申请，避免无谓打扰 -->
+    <!-- <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> -->
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:name=".bridge.AppBridge"
+        android:allowBackup="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CodeBeacon">
+
+        <!-- Flutter 侧承载，Kotlin 与 Flutter 混编时需要 -->
+        <activity
+            android:name=".bridge.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.CodeBeacon"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/Theme.CodeBeacon" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          通知监听服务。
+          exported 必须为 true，否则系统绑定不到（这是个常见坑）。
+          permission 必须是 BIND_NOTIFICATION_LISTENER_SERVICE，系统才会授予绑定权。
+        -->
+        <service
+            android:name=".listener.CodeListenerService"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!--
+          桌面小部件。
+          ⚠️ android:name（receiver 类名）一旦发布禁止修改。
+        -->
+        <receiver
+            android:name=".widget.CodeWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.codebeacon.widget.REFRESH" />
+                <action android:name="com.codebeacon.widget.ACCESS_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_code_info" />
+        </receiver>
+
+        <!-- MIUI 小部件标识：官方规范要求，缺失会导致系统无法识别小部件 -->
+        <meta-data
+            android:name="miui.appwidget"
+            android:resource="@xml/miui_widget_meta" />
+
+        <!--
+          FileProvider：导出记事本到私有目录时需要。
+          路径配置见 xml/file_paths.xml
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+</manifest>
