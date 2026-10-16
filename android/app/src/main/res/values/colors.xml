@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  亮色模式配色。
+  MIUI 规范要求：深色模式只能靠 values-night 静态适配，
+  不能在 RemoteViews 代码里动态设置。
+-->
+<resources>
+    <color name="widget_text">#212121</color>
+    <color name="widget_subtext">#757575</color>
+    <color name="widget_bg_start">#FFFFFF</color>
+    <color name="widget_bg_end">#F5F5F5</color>
+    <color name="widget_badge">#FF6A00</color>
+    <color name="widget_stroke">#1F000000</color>
+    <color name="app_bg">#FAFAFA</color>
+</resources>
