@@ -113,8 +113,7 @@ class CodeListenerService : NotificationListenerService() {
         try {
             val views = arrayOf(
                 notification.contentView,
-                notification.bigContentView,
-                notification.decorView
+                notification.bigContentView
             )
             for (rv in views) {
                 if (rv == null) continue
