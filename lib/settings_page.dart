@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'archive_page.dart';
 import 'bridge.dart';
 
 /// 设置页
