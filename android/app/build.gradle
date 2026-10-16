@@ -56,6 +56,7 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled false       // 先不开启混淆，等功能验证通过再开（混淆会拖慢调试）
+            shrinkResources false     // Flutter 插件默认在 release 开 shrinkResources，必须显式关闭，否则与 minifyEnabled false 冲突
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
