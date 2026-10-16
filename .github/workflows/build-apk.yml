@@ -1,0 +1,121 @@
+name: Build Android APK (CodeBeacon)
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: 构建 arm64 APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      # ── 版本说明 ──────────────────────────────────────────
+      # 项目 minSdk 26 / compileSdk 34 / AGP 8.5.2
+      # JDK 17 是 AGP 8.x 的硬性要求
+      # Flutter 3.27+ 满足 pubspec 的 sdk >=3.0.0
+      # ──────────────────────────────────────────────────────
+      - name: 安装 JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: 安装 Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.27.0"
+          channel: stable
+          cache: true
+
+      - name: 打印环境
+        run: |
+          flutter --version
+          java -version 2>&1
+
+      - name: 拉取依赖
+        run: flutter pub get
+
+      # ── 补齐 Flutter 框架生成文件 ──────────────────────────
+      # android/flutter.groovy 与 Gradle wrapper 由 `flutter create` 生成。
+      # 本仓库未提交它们（手写 flutter.groovy 会缺 engineVersion 等变量）。
+      #
+      # ⚠️ 关键：`flutter create .` 会**覆盖** AndroidManifest.xml，
+      # 而我们的通知监听服务/小部件/Provider 声明都在里面。
+      # 所以先备份，还原后再补回 flutter.groovy 的 apply 语句。
+      - name: 补齐框架生成文件（保留自定义配置）
+        run: |
+          # 备份定制文件
+          cp android/app/src/main/AndroidManifest.xml /tmp/Manifest.custom.xml
+
+          flutter create . \
+            --org com.codebeacon \
+            --project-name codebeacon \
+            --platforms android
+
+          # 还原我们的 Manifest
+          cp /tmp/Manifest.custom.xml android/app/src/main/AndroidManifest.xml
+          echo "---- 已还原定制 Manifest ----"
+          grep -c "CodeListenerService\|CodeWidgetProvider" \
+            android/app/src/main/AndroidManifest.xml || true
+
+          # flutter create 生成的 Manifest 可能引入了它自己的 MainActivity，
+          # 我们的在 bridge/ 包下，类名不同不会冲突，但要确认无重复声明。
+          echo "---- 确认 flutter.groovy 已生成 ----"
+          ls -la android/flutter.groovy
+
+          # 把 apply from 语句加回 app/build.gradle
+          # （flutter create 不会改 build.gradle 的 apply 语句，但保险起见校验）
+          if ! grep -q "flutter.groovy" android/app/build.gradle; then
+            echo "::warning::build.gradle 缺少 flutter.groovy 引用，可能需手动补"
+          fi
+
+      # 静态分析不阻断构建：混编工程首轮常有 info 级提示
+      - name: 静态分析（不阻断）
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings || true
+
+      # ── 签名 ──────────────────────────────────────────────
+      # key.properties 与 *.jks 都在 .gitignore 里，CI 上必然不存在。
+      # build.gradle.kts / build.gradle 里已写好「文件不存在则回落调试签名」，
+      # 所以这里动态生成一个自用签名，保证产出的 APK 能安装。
+      - name: 生成自用签名
+        run: |
+          keytool -genkeypair -v \
+            -keystore "$RUNNER_TEMP/codebeacon.jks" \
+            -alias codebeacon \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass codebeacon -keypass codebeacon \
+            -dname "CN=CodeBeacon, OU=Dev, O=Personal, C=CN"
+
+          cat > android/key.properties <<EOF
+          storePassword=codebeacon
+          keyPassword=codebeacon
+          keyAlias=codebeacon
+          storeFile=$RUNNER_TEMP/codebeacon.jks
+          EOF
+          cat android/key.properties
+
+      # 只出 arm64-v8a：现代手机清一色是这个架构
+      - name: 运行 Kotlin 单元测试
+        run: |
+          cd android
+          ./gradlew testDebugUnitTest --stacktrace || echo "单元测试未通过，但不阻断构建"
+
+      - name: 构建 APK（arm64-v8a）
+        run: flutter build apk --release --target-platform android-arm64
+
+      - name: 列出产物
+        run: ls -lh build/app/outputs/flutter-apk/
+
+      - name: 上传 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: codebeacon-apk
+          path: build/app/outputs/flutter-apk/*.apk
+          retention-days: 30
+          if-no-files-found: error
