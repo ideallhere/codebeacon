@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
             const Text(
               '这是本应用唯一需要的权限。开启后会自动读取短信、微信、'
               '支付宝里的取件码，所有数据仅保存在本机。',
-              style: FontSize: 13, height: 1.5,
+              style: TextStyle(fontSize: 13, height: 1.5),
             ),
             const SizedBox(height: 12),
             FilledButton.icon(
