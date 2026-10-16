@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MIUI 规范建议引用 dimen 而非硬编码，便于适配 -->
+    <dimen name="widget_root_padding">10dp</dimen>
+    <dimen name="widget_corner_radius">16dp</dimen>
+</resources>
