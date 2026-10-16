@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MIUI 小部件标识元数据。
+
+  官方规范：「通过审核的小部件移除 MIUI Widget 标识，会导致系统无法识别，
+  造成一些严重的错误，因此小部件一旦审核通过，禁止随意移除 MIUI Widget 标识。」
+
+  这里声明小部件的基础信息，供 MIUI 系统识别与展示。
+-->
+<miui-widget xmlns:miui="http://miui.com/widget">
+    <miui:widgetType value="appwidget" />
+    <miui:category value="system" />
+    <miui:version value="1.0" />
+    <miui:minWidth value="2" />
+    <miui:minHeight value="2" />
+    <miui:maxWidth value="4" />
+    <miui:maxHeight value="4" />
+    <miui:previewImage value="@layout/widget_code" />
+    <miui:description value="@string/widget_description" />
+</miui-widget>
